@@ -10,31 +10,47 @@ public class Registration
       boolean running = true;
        
       while(running){
-        System.out.println ("---------------------------------");
-        System.out.println ("|   PRIMARY 1 REGISTRATION      |");
-        System.out.println ("     | M A I N  M E N U |     ");
-        
-        System.out.println ("---------------------------------");
-        System.out.println ("                            ");
-        
-        System.out.println ("---------------------------------");
-        System.out.println ("|       LOGIN / SIGN UP:        |");
-        System.out.println ("---------------------------------");
-        System.out.println ("1)LOGIN   \n2)SIGN UP FOR PARENT ACCOUNT  \n3)EXIT ");
-        System.out.println( "---------------------------------");
-        Scanner sc=new Scanner (System.in);
-        int choice = sc.nextInt();
-        
+        System.out.println("\n====================================");
+            System.out.println("       PRIMARY 1 REGISTRATION       ");
+            System.out.println("             MAIN MENU              ");
+            System.out.println("====================================");
+            System.out.println("1) Login");
+            System.out.println("2) Sign Up for Parent Account");
+            System.out.println("3) Exit");
+            System.out.println("====================================");
+            System.out.print("👉 Please enter your choice (1-3): ");
+            Scanner sc= new Scanner(System.in);
+        if (sc.hasNextInt());
+         {
+            int choice = sc.nextInt();
+            sc.nextLine();
         switch (choice) {
             case 1: 
-                   System.out.println ("------LOGIN-----");
-                   System.out.println ("Enter username: ");
+                    System.out.println("------ LOGIN -----");
+                        System.out.print("Enter username: ");
+                        String loginUser = sc.nextLine();
+                        System.out.print("Enter password: ");
+                        String loginPass = sc.nextLine();
+                        
+                        boolean parentLogin = checkFile("parents.txt", loginUser, loginPass);
+                        boolean teacherLogin = checkFile("teacher.txt", loginUser, loginPass);
+                        
+                        if (parentLogin)
+                        {
+                          parentMenu();
+                        }
+                        else if (teacherLogin){
+                            teacherMenu();
+                        }
+                        else {
+                            System.out.println("Login failed. Incorrect Username or Password");
+                        }
+                        
+                        
                    
-                   
-                break;
             case 2: 
                  System.out.println("-----Parents registration -----");
-                System.out.println("Enter username: ");
+                System.out.println("create username: ");
                 String username = sc.nextLine();
                  
                 System.out.println("create password: ");
@@ -57,7 +73,6 @@ public class Registration
                    break;
                    default:
                        System.out.println("Invalid choice");
-                    
                    
              case 3: 
                  System.out.println("Exitting program..");
@@ -66,7 +81,9 @@ public class Registration
             }
                 
                 }
-                
-            
-        }
-    }
+               
+                                    }
+                                }
+                            }
+                        
+                    
