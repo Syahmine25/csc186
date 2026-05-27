@@ -1,16 +1,13 @@
 import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 
-public class Registration 
-{
-    public static void main(String args[])
-    {
-      boolean running = true;
-       
-      while(running){
-        System.out.println("\n====================================");
+public class Registration {
+    public static void main(String[] args) {
+        boolean running = true;
+        Scanner sc = new Scanner(System.in);
+
+        while (running) {
+            System.out.println("\n====================================");
             System.out.println("       PRIMARY 1 REGISTRATION       ");
             System.out.println("             MAIN MENU              ");
             System.out.println("====================================");
@@ -19,71 +16,83 @@ public class Registration
             System.out.println("3) Exit");
             System.out.println("====================================");
             System.out.print("👉 Please enter your choice (1-3): ");
-            Scanner sc= new Scanner(System.in);
-        if (sc.hasNextInt());
-         {
-            int choice = sc.nextInt();
-            sc.nextLine();
-        switch (choice) {
-            case 1: 
-                    System.out.println("------ LOGIN -----");
+
+            if (sc.hasNextInt()) {
+                int choice = sc.nextInt();
+                sc.nextLine(); 
+
+                switch (choice) {
+                    case 1:
+                        System.out.println("------ LOGIN -----");
                         System.out.print("Enter username: ");
                         String loginUser = sc.nextLine();
                         System.out.print("Enter password: ");
                         String loginPass = sc.nextLine();
-                        
+
                         boolean parentLogin = checkFile("parents.txt", loginUser, loginPass);
                         boolean teacherLogin = checkFile("teacher.txt", loginUser, loginPass);
-                        
-                        if (parentLogin)
-                        {
-                          parentMenu();
+
+                        if (parentLogin) {
+                            System.out.println("✅ Parent login successful!");
+                            Parents P = new Parents();
+                            P.parentsMenu();
+                        } else if (teacherLogin) {
+                            System.out.println("✅ Teacher login successful!");
+                        } else {
+                            System.out.println("❌ Login failed. Incorrect Username or Password");
                         }
-                        else if (teacherLogin){
-                            teacherMenu();
+                        break;
+
+                    case 2:
+                        System.out.println("----- Parents Registration -----");
+                        System.out.print("Create username: ");
+                        String username = sc.nextLine();
+                        System.out.print("Create password: ");
+                        String password = sc.nextLine();
+
+                        try (BufferedWriter bw = new BufferedWriter(new FileWriter("parents.txt", true))) {
+                            bw.write(username + "," + password);
+                            bw.newLine();
+                            System.out.println("🎉 Registration successful! Login now.");
+                        } catch (IOException e) {
+                            System.out.println("⚠️ Error saving data.");
+                            e.printStackTrace();
                         }
-                        else {
-                            System.out.println("Login failed. Incorrect Username or Password");
-                        }
-                        
-                        
-                   
-            case 2: 
-                 System.out.println("-----Parents registration -----");
-                System.out.println("create username: ");
-                String username = sc.nextLine();
-                 
-                System.out.println("create password: ");
-                String password =sc.nextLine();
-                
-                try {
-                    FileWriter fw= new FileWriter("parents.txt",true);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    
-                    bw.write(username + " , "+password);
-                    bw.newLine();
-                    bw.flush();
-                    bw.close();
-                    
-                    System.out.println ("registration successful ! Login now");
-                   } catch (IOException e){
-                       System.out.println (" An error occured while saving data.");
-                       e.printStackTrace();
-                    }
-                   break;
-                   default:
-                       System.out.println("Invalid choice");
-                   
-             case 3: 
-                 System.out.println("Exitting program..");
-                 running = false;
-               break;
-            }
-                
+                        break;
+
+                    case 3:
+                        System.out.println("👋 Exiting program...");
+                        running = false;
+                        break;
+
+                    default:
+                        System.out.println("⚠️ Invalid choice. Please try again.");
                 }
-               
-                                    }
-                                }
-                            }
-                        
-                    
+            } else {
+                System.out.println("⚠️ Invalid input. Please enter a number.");
+                sc.next(); 
+            }
+        }
+        sc.close();
+    }
+
+    
+    public static boolean checkFile(String filename, String loginUser, String loginPass) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String savedUser = parts[0].trim();
+                    String savedPass = parts[1].trim();
+                    if (loginUser.equals(savedUser) && loginPass.equals(savedPass)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("⚠️ Error reading " + filename);
+        }
+        return false;
+    }
+}
