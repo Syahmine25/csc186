@@ -1,50 +1,109 @@
 import java.util.Scanner;
 import java.io.*;
 
-public class Student
-{
-    public void StudentDetails(){
-        boolean running = true;
+public class Student {
+
+    public void StudentDetails() {
+
         int option;
         String StudentName;
+        String dateOfBirth;
         int MykidNum;
         String HomeAddress;
         String gender;
-        
-    Scanner sc = new Scanner(System.in);
-    System.out.println("1)Enter details \n2)Back ");
-    option = sc.nextInt();
-    
-    if (option==1){
-        System.out.println("Enter student name: ");
-        StudentName = sc.nextLine();
-        
-        System.out.println("enter Mykid number: ");
-        MykidNum = sc.nextInt();
-        sc.nextLine();
-        
-        System.out.println("Home Address: ");
-        HomeAddress = sc.nextLine();
-        
-        System.out.println("Enter Gender (F/M):");
-        gender = sc.nextLine();
-        sc.nextLine();
-        
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("student.txt" , true ))) {
-            bw.write(StudentName + " , " + MykidNum + " , " + HomeAddress + " , " + gender);
-            bw.newLine();
-            System.out.println("Infomation entered successfully!");
-        } catch (IOException iox) {
-            System.out.println(iox.getMessage());
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("╔═══════════════════════════════════════╗");
+        System.out.println("║         STUDENT REGISTRATION          ║");
+        System.out.println("╠═══════════════════════════════════════╣");
+        System.out.println("║  1. Enter Student Details             ║");
+        System.out.println("║  2. Back                              ║");
+        System.out.println("╚═══════════════════════════════════════╝");
+        System.out.print("Choice: ");
+
+        option = sc.nextInt();
+        sc.nextLine(); 
+
+        if (option == 1) {
+
+            System.out.println();
+            System.out.println("╔═══════════════════════════════════════╗");
+            System.out.println("║          ENTER STUDENT DATA           ║");
+            System.out.println("╚═══════════════════════════════════════╝");
+
+            
+            while (true) {
+                System.out.print("► Student Name              : ");
+                StudentName = sc.nextLine();
+
+                if (StudentName.matches("[a-zA-Z ]+")) {
+                    break;
+                }
+
+                System.out.println("✗ Invalid name! Letters only.");
+            }
+
+            
+            while (true) {
+                System.out.print("► Date of Birth (DD/MM/YYYY): ");
+                dateOfBirth = sc.nextLine();
+
+                if (dateOfBirth.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                    break;
+                }
+
+                System.out.println("✗ Invalid date format! Use DD/MM/YYYY.");
+            }
+
+            System.out.print("► MyKid Number              : ");
+            MykidNum = sc.nextInt();
+            sc.nextLine(); // clear buffer
+
+            System.out.print("► Home Address              : ");
+            HomeAddress = sc.nextLine();
+
+            
+            while (true) {
+                System.out.print("► Gender (F/M)              : ");
+                gender = sc.nextLine().toUpperCase();
+
+                if (gender.equals("F") || gender.equals("M")) {
+                    break;
+                }
+
+                System.out.println("✗ Invalid gender! Please enter F or M only.");
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(
+                    new FileWriter("student.txt", true))) {
+
+                bw.write(StudentName + " , " +
+                         dateOfBirth + " , " +
+                         MykidNum + " , " +
+                         HomeAddress + " , " +
+                         gender);
+
+                bw.newLine();
+
+                System.out.println();
+                System.out.println("╔═══════════════════════════════════════╗");
+                System.out.println("║       RECORD SAVED SUCCESSFULLY       ║");
+                System.out.println("╚═══════════════════════════════════════╝");
+
+            } catch (IOException iox) {
+                System.out.println("✗ Error: " + iox.getMessage());
+            }
+
+        } else if (option == 2) {
+
+            Parents P = new Parents();
+            P.parentsMenu();
+
+        } else {
+
+            System.out.println();
+            System.out.println("✗ Invalid option! Please choose 1 or 2.");
         }
-        
-    } else if (option==2){
-       Parents P = new Parents();
-       P.parentsMenu();
-       
     }
-    } 
-    
-    
-    
 }
