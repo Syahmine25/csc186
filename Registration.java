@@ -7,6 +7,8 @@ public class Registration {
         Scanner sc = new Scanner(System.in);
 
         while (running) {
+            clearScreen(); 
+
             System.out.println("\n====================================");
             System.out.println("       PRIMARY 1 REGISTRATION       ");
             System.out.println("             MAIN MENU              ");
@@ -23,6 +25,7 @@ public class Registration {
 
                 switch (choice) {
                     case 1:
+                        clearScreen();
                         System.out.println("------ LOGIN -----");
                         System.out.print("Enter username: ");
                         String loginUser = sc.nextLine();
@@ -38,12 +41,15 @@ public class Registration {
                             P.parentsMenu();
                         } else if (teacherLogin) {
                             System.out.println("✅ Teacher login successful!");
+                            
                         } else {
                             System.out.println("❌ Login failed. Incorrect Username or Password");
                         }
+                        pause(sc); 
                         break;
 
                     case 2:
+                        clearScreen();
                         System.out.println("----- Parents Registration -----");
                         System.out.print("Create username: ");
                         String username = sc.nextLine();
@@ -58,25 +64,28 @@ public class Registration {
                             System.out.println("⚠️ Error saving data.");
                             e.printStackTrace();
                         }
+                        pause(sc);
                         break;
 
                     case 3:
+                        clearScreen();
                         System.out.println("👋 Exiting program...");
                         running = false;
                         break;
 
                     default:
                         System.out.println("⚠️ Invalid choice. Please try again.");
+                        pause(sc);
                 }
             } else {
                 System.out.println("⚠️ Invalid input. Please enter a number.");
                 sc.next(); 
+                pause(sc);
             }
         }
         sc.close();
     }
 
-    
     public static boolean checkFile(String filename, String loginUser, String loginPass) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -94,5 +103,17 @@ public class Registration {
             System.out.println("⚠️ Error reading " + filename);
         }
         return false;
+    }
+
+    
+    public static void clearScreen() {
+        System.out.print("\f");
+        System.out.flush();
+    }
+
+    
+    public static void pause(Scanner sc) {
+        System.out.print("\nPress [ENTER] to return to menu...");
+        sc.nextLine();
     }
 }
