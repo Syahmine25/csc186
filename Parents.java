@@ -5,44 +5,56 @@ import java.util.Scanner;
 
 public class Parents
 {
+    public static void clearScreen() {
+        System.out.print("\f");
+        System.out.flush();
+    } 
+    
     Scanner input = new Scanner(System.in);
-
-    public void registerForm()
-{
-    input.nextLine(); // consume newline
-    System.out.println("\n--- Student Registration ---");
-    System.out.print("Enter student name: ");
-    String name = input.nextLine();
-
-    System.out.print("Enter student age: ");
-    int age = input.nextInt();
-
-    // Save to file
-    try {
-        FileWriter fw = new FileWriter("students.txt", true); // append mode
-        BufferedWriter bw = new BufferedWriter(fw);
-
-        bw.write(name + " , " + age);
-        bw.newLine();
-        bw.flush();
-        bw.close();
-
-        System.out.println("Student registered successfully! Data saved to students.txt");
-    } catch (IOException e) {
-        System.out.println("An error occurred while saving student data.");
-        e.printStackTrace();
-    }
-}
-
-
-    public void updateForm()
+    public void ProvideDetails()
     {
-        input.nextLine();
-        System.out.println("\n--- Profile Management ---");
-        System.out.print("Enter student name to update: ");
-        String name = input.nextLine();
-
-        System.out.println("Profile updated successfully!");
+        //constructor 
+        int option;
+        String Name;
+        int ICnumber;
+        String Occupation;
+        int PhoneNum;
+        String choice;
+        
+        System.out.println ("1) Parents Details \n2)Student Details \n3)Back ");
+        option = input.nextInt();
+        
+        if (option==1)
+        {
+            do{
+                clearScreen();
+         System.out.println("====Parents Details====");
+          System.out.println("Enter Parent name: ");
+          Name = input.nextLine();
+          
+          System.out.println("Enter IC number number: ");
+          ICnumber = input.nextInt();
+          
+          System.out.println("Enter occupation: ");
+          Occupation = input.nextLine();
+          
+          System.out.println("Enter phone number: ");
+          PhoneNum = input.nextInt();
+          
+          System.out.println("Fill another details ? (Y/N):");
+          choice = input.nextLine();
+          
+        }while (choice!="N");
+   } else if (option== 2){
+       clearScreen();
+       Student S = new Student();
+       S.StudentDetails();
+   }
+}
+   
+    public void StatusApply()
+    {
+        
     }
 
     public void parentsMenu()
@@ -52,16 +64,17 @@ public class Parents
         do
         {
             System.out.println("\n===== PARENTS MENU =====");
-            System.out.println("1) Student Registration");
-            System.out.println("2) Profile Management");
+            System.out.println("1) Provide Details");
+            System.out.println("2) Status Application");
             System.out.println("3) Back");
             System.out.print("Choose option: ");
             option = input.nextInt();
 
             if(option == 1)
-                registerForm();
+               ProvideDetails(); 
             else if(option == 2)
-                updateForm();
+               ProvideDetails();
+               
             else if(option == 3)
                 System.out.println("Back to Main Menu...");
             else
