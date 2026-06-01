@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.io.*;
 
 public class Teacher {
     private String adminID;
@@ -23,6 +24,7 @@ public class Teacher {
             processRegistration();
         } else if (choice == 2) {
             System.out.println("Returning to Main Menu...");
+            // RegistrationMainMenu() called by leader's main class
         } else {
             System.out.println("Invalid choice. Try again.");
             TeacherMenu();
@@ -31,56 +33,66 @@ public class Teacher {
 
     // ==================== PROCESS REGISTRATION ====================
     public void processRegistration() {
-        String studentName, studentAge, studentDOB, studentGender, studentAddress, mykidNum;
-        String parentName, parentIC, parentOccupation, parentPhone;
-        String documentType, fileName;
         String status = "Pending";
         String docVerified, studentVerified, decision;
 
-        // getDetails()
+        // ---------- getDetails() - read from txt files ----------
         System.out.println("=== REGISTRATION DETAILS ===");
 
-        System.out.print("Student Name: ");
-        studentName = scanner.nextLine();
+        String studentName = "";
+        String studentAge = "";
+        String studentDOB = "";
+        String studentGender = "";
+        String studentAddress = "";
+        String mykidNum = "";
+        String parentName = "";
+        String parentIC = "";
+        String parentOccupation = "";
+        String parentPhone = "";
+        String documentType = "";
+        String fileName = "";
 
-        System.out.print("Age: ");
-        studentAge = scanner.nextLine();
-
-        System.out.print("Date of Birth (DD/MM/YYYY): ");
-        studentDOB = scanner.nextLine();
-
-        do {
-            System.out.print("Gender (M/F): ");
-            studentGender = scanner.nextLine();
-            if (!studentGender.equalsIgnoreCase("M") && !studentGender.equalsIgnoreCase("F")) {
-                System.out.println("Invalid input. Please enter M or F only.");
+        // Read from parents.txt
+        try {
+            BufferedReader parentsReader = new BufferedReader(new FileReader("parents.txt"));
+            String line;
+            while ((line = parentsReader.readLine()) != null) {
+                if (line.startsWith("Student Name:"))      studentName = line.substring(13).trim();
+                else if (line.startsWith("Age:"))          studentAge = line.substring(4).trim();
+                else if (line.startsWith("Date of Birth:")) studentDOB = line.substring(13).trim();
+                else if (line.startsWith("Gender:"))       studentGender = line.substring(7).trim();
+                else if (line.startsWith("Address:"))      studentAddress = line.substring(8).trim();
+                else if (line.startsWith("MyKid Number:")) mykidNum = line.substring(13).trim();
+                else if (line.startsWith("Parent Name:"))  parentName = line.substring(12).trim();
+                else if (line.startsWith("Parent IC:"))    parentIC = line.substring(10).trim();
+                else if (line.startsWith("Occupation:"))   parentOccupation = line.substring(11).trim();
+                else if (line.startsWith("Phone:"))        parentPhone = line.substring(6).trim();
             }
-        } while (!studentGender.equalsIgnoreCase("M") && !studentGender.equalsIgnoreCase("F"));
+            parentsReader.close();
+            System.out.println("Data loaded from parents.txt");
+        } catch (IOException e) {
+            System.out.println("Error: parents.txt not found. Please make sure parent has submitted their details.");
+            TeacherMenu();
+            return;
+        }
 
-        System.out.print("Home Address: ");
-        studentAddress = scanner.nextLine();
+        // Read from document.txt
+        try {
+            BufferedReader docReader = new BufferedReader(new FileReader("document.txt"));
+            String line;
+            while ((line = docReader.readLine()) != null) {
+                if (line.startsWith("Document Type:")) documentType = line.substring(14).trim();
+                else if (line.startsWith("File Name:"))  fileName = line.substring(10).trim();
+            }
+            docReader.close();
+            System.out.println("Data loaded from document.txt");
+        } catch (IOException e) {
+            System.out.println("Error: document.txt not found. Please make sure parent has uploaded their document.");
+            TeacherMenu();
+            return;
+        }
 
-        System.out.print("MyKid Number: ");
-        mykidNum = scanner.nextLine();
-
-        System.out.print("Parent Name: ");
-        parentName = scanner.nextLine();
-
-        System.out.print("Parent IC Number: ");
-        parentIC = scanner.nextLine();
-
-        System.out.print("Parent Occupation: ");
-        parentOccupation = scanner.nextLine();
-
-        System.out.print("Parent Phone Number: ");
-        parentPhone = scanner.nextLine();
-
-        System.out.print("Document Type (e.g. Birth Certificate): ");
-        documentType = scanner.nextLine();
-
-        System.out.print("File Name (e.g. birthcert.pdf): ");
-        fileName = scanner.nextLine();
-
+        // Display all details
         System.out.println("----------------------------------");
         System.out.println("Student Name     : " + studentName);
         System.out.println("Age              : " + studentAge);
@@ -97,7 +109,7 @@ public class Teacher {
         System.out.println("Current Status   : " + status);
         System.out.println("----------------------------------");
 
-        // verifyDocument()
+        // ---------- verifyDocument() ----------
         System.out.println("=== VERIFY DOCUMENT ===");
         System.out.print("Is the document valid? (yes/no): ");
         docVerified = scanner.nextLine();
@@ -105,7 +117,7 @@ public class Teacher {
         if (docVerified.equalsIgnoreCase("yes")) {
             System.out.println("Document verified.");
 
-            // verifyStudent()
+            // ---------- verifyStudent() ----------
             System.out.println("=== VERIFY STUDENT ===");
             System.out.print("Are student details correct? (yes/no): ");
             studentVerified = scanner.nextLine();
@@ -113,28 +125,41 @@ public class Teacher {
             if (studentVerified.equalsIgnoreCase("yes")) {
                 System.out.println("Student details verified.");
 
-                // approveStudent() / rejectStudent()
+                // ---------- approveStudent() / rejectStudent() ----------
                 System.out.print("Decision - approve or reject: ");
                 decision = scanner.nextLine();
 
-                // updateStatus()
+                // ---------- updateStatus() ----------
                 if (decision.equalsIgnoreCase("approve")) {
                     status = "Approved";
                 } else {
                     status = "Rejected";
                 }
-                System.out.println("Registration status updated: " + status);
 
             } else {
-                // updateStatus()
+                // ---------- updateStatus() ----------
                 status = "Rejected - Invalid Student Details";
-                System.out.println("Registration status updated: " + status);
             }
 
         } else {
-            // updateStatus()
+            // ---------- updateStatus() ----------
             status = "Rejected - Invalid Document";
+        }
+
+        // Save updated status to student.txt
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("student.txt"));
+            writer.write("Student Name: " + studentName);
+            writer.newLine();
+            writer.write("MyKid Number: " + mykidNum);
+            writer.newLine();
+            writer.write("Status: " + status);
+            writer.newLine();
+            writer.close();
             System.out.println("Registration status updated: " + status);
+            System.out.println("Status saved to student.txt");
+        } catch (IOException e) {
+            System.out.println("Error saving status: " + e.getMessage());
         }
 
         System.out.println("Process complete. Final Status: " + status);
