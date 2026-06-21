@@ -55,7 +55,7 @@ public class Registration {
             System.out.println("║              MAIN MENU                ║");
             System.out.println("╠═══════════════════════════════════════╣");
             System.out.println("║  1. Login                             ║");
-            System.out.println("║  2. Sign Up                           ║");
+            System.out.println("║  2. Create account for Parents        ║");
             System.out.println("║  3. Exit                              ║");
             System.out.println("╚═══════════════════════════════════════╝");
 
