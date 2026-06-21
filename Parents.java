@@ -128,7 +128,8 @@ public class Parents {
             System.out.println("╚═══════════════════════════════════════╝");
 
             System.out.println("Opening PDF Manager...");
-            PDFManager.pdfManagerMenu();
+            PDFManager manager = new PDFManager();
+            manager.pdfManagerMenu();
 
         } else if (option == 4) {
 
