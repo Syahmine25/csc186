@@ -1,8 +1,10 @@
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.StandardCopyOption;
+import java.awt.*;
+import java.awt.Desktop;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
 
 /**
  * PDFManager - Upload, store, and open PDF files properly without showing binary data
@@ -160,9 +162,9 @@ public class PDFManager {
     /**
      * Main menu for testing
      */
-    public static void main(String[] args) {
+    public static void pdfManagerMenu() {
         while (true) {
-            String[] options = {"Upload PDF", "List PDFs", "Delete PDF", "Exit"};
+            String[] options = {"Upload PDF", "List PDFs", "Delete PDF", "Back"};
             int choice = JOptionPane.showOptionDialog(null, 
                 "PDF Manager - What would you like to do?", 
                 "PDF Manager Menu",
@@ -184,9 +186,9 @@ public class PDFManager {
                     }
                     break;
                 case 3:
-                    System.exit(0);
+                    return;  // 🔧 Go back instead of exit
                 default:
-                    break;
+                    return;
             }
         }
     }
