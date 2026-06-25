@@ -48,6 +48,21 @@ public class Teacher {
         }
     }
 
+    // ==================== DISPLAY STUDENT DETAILS ====================
+    private void displayStudentDetails(String name, String dob, String mykid, String address, String gender, String status) {
+        clearScreen();
+        System.out.println("╔═══════════════════════════════════════╗");
+        System.out.println("║          REGISTRATION DETAILS         ║");
+        System.out.println("╠═══════════════════════════════════════╣");
+        System.out.println("  Student Name  : " + name);
+        System.out.println("  Date of Birth : " + dob);
+        System.out.println("  MyKid Number  : " + mykid);
+        System.out.println("  Home Address  : " + address);
+        System.out.println("  Gender        : " + gender);
+        System.out.println("  Current Status: " + status);
+        System.out.println("╚═══════════════════════════════════════╝");
+    }
+
     // ==================== PROCESS REGISTRATION ====================
     public void processRegistration() {
         List<String[]> students = new ArrayList<>();
@@ -56,14 +71,16 @@ public class Teacher {
         try (BufferedReader studentReader = new BufferedReader(new FileReader("student.txt"))) {
             String line;
             while ((line = studentReader.readLine()) != null) {
-                String[] parts = line.split("\\s*,\\s*"); // handles spaces around commas
+                String[] parts = line.split("\\s*,\\s*");
                 if (parts.length == 5) {
                     students.add(parts);
                 }
             }
         } catch (IOException e) {
             System.out.println("⚠️ Error: student.txt not found.");
-            pause(); TeacherMenu(); return;
+            pause();
+            TeacherMenu();
+            return;
         }
 
         // Loop through each student
@@ -75,19 +92,10 @@ public class Teacher {
             String studentGender  = s[4];
             String status         = "Pending";
 
-            clearScreen();
-            System.out.println("╔═══════════════════════════════════════╗");
-            System.out.println("║          REGISTRATION DETAILS         ║");
-            System.out.println("╠═══════════════════════════════════════╣");
-            System.out.println("  Student Name  : " + studentName);
-            System.out.println("  Date of Birth : " + studentDOB);
-            System.out.println("  MyKid Number  : " + mykidNum);
-            System.out.println("  Home Address  : " + studentAddress);
-            System.out.println("  Gender        : " + studentGender);
-            System.out.println("  Current Status: " + status);
-            System.out.println("╚═══════════════════════════════════════╝");
+            // Show initial details with Pending status
+            displayStudentDetails(studentName, studentDOB, mykidNum, studentAddress, studentGender, status);
 
-            // verifyDocument()
+            // Document verification
             System.out.print("\n► Is the document valid? (yes/no): ");
             String docVerified = sc.nextLine();
 
@@ -106,6 +114,10 @@ public class Teacher {
                 status = "Rejected - Invalid Document";
             }
 
+            // Re-display with updated status
+            displayStudentDetails(studentName, studentDOB, mykidNum, studentAddress, studentGender, status);
+            System.out.println("\n✅ Registration status updated: " + status);
+
             // Save to status.txt
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("status.txt", true))) {
                 writer.write("Student Name: " + studentName);
@@ -120,10 +132,23 @@ public class Teacher {
                 System.out.println("⚠️ Error saving status: " + e.getMessage());
             }
 
-            System.out.println("\n✅ Registration status updated: " + status);
-            pause();
+            // If approved, ask teacher to continue or stop
+            if (status.equals("Approved")) {
+                System.out.print("\n► Check next student applicant? (yes/no): ");
+                String continueCheck = sc.nextLine();
+                if (!continueCheck.equalsIgnoreCase("yes")) {
+                    System.out.println("Returning to Teacher Menu...");
+                    pause();
+                    TeacherMenu();
+                    return;
+                }
+            } else {
+                pause();
+            }
         }
 
+        System.out.println("\n✅ All student applications have been reviewed.");
+        pause();
         TeacherMenu();
     }
 }
