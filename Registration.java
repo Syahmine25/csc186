@@ -79,13 +79,13 @@ public class Registration {
                     System.out.print("► Password: ");
                     String loginPass = sc.nextLine();
 
-                    boolean parentLogin = checkFile("parents.txt", loginUser, loginPass);
+                    boolean parentLogin = checkFile("parents_accounts.txt", loginUser, loginPass);
                     boolean teacherLogin = checkFile("teacher.txt", loginUser, loginPass);
 
                     if (parentLogin) {
 
                         System.out.println("\nLogin successful (Parent).");
-                        Parents P = new Parents();
+                        Parents P = new Parents(loginUser);
                         P.parentsMenu();
 
                     } else if (teacherLogin) {
@@ -116,7 +116,7 @@ public class Registration {
                     String password = sc.nextLine();
 
                     try (BufferedWriter bw = new BufferedWriter(
-                            new FileWriter("parents.txt", true))) {
+                            new FileWriter("parents_accounts.txt", true))) {
                                 bw.write(username + "," + password + ",");
                         bw.newLine();
 
