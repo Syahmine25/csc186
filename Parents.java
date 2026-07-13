@@ -3,6 +3,15 @@ import java.util.*;
 
 public class Parents {
     Scanner input = new Scanner(System.in);
+    private String username;
+
+    public Parents() {
+        this.username = null;
+    }
+
+    public Parents(String username) {
+        this.username = username;
+    }
 
     public static void clearScreen() {
         System.out.print("\f");
@@ -47,7 +56,7 @@ public class Parents {
     public void ProvideDetails() {
         int option;
         String Name;
-        String ICnumber;
+        String MykadNum;
         String Occupation;
         String PhoneNum;
         String choice;
@@ -82,11 +91,16 @@ public class Parents {
                 System.out.println("║           PARENTS DETAILS             ║");
                 System.out.println("╚═══════════════════════════════════════╝");
 
+                // Automatically tagged with the logged-in parent's username —
+                // no typing or selecting anything. This links to whatever
+                // student(s) were registered under this same account.
+                String linkKey = (username != null) ? username : "UNKNOWN";
+
                 System.out.print("► Parent Name  : ");
                 Name = input.nextLine();
 
-                System.out.print("► IC Number    : ");
-                ICnumber = input.nextLine();
+                System.out.print("► Parent's MyKad Number : ");
+                MykadNum = input.nextLine();
 
                 System.out.print("► Occupation   : ");
                 Occupation = input.nextLine();
@@ -95,11 +109,12 @@ public class Parents {
                 PhoneNum = input.nextLine();
 
                 try (BufferedWriter bw = new BufferedWriter(
-                        new FileWriter("parents.txt", true))) {
+                        new FileWriter("parents_details.txt", true))) {
 
-                    bw.write(Name + " , " +
-                             ICnumber + " , " +
-                             Occupation + " , " +
+                    bw.write(linkKey + "," +
+                             Name + "," +
+                             MykadNum + "," +
+                             Occupation + "," +
                              PhoneNum);
                     bw.newLine();
                     System.out.println("╔═══════════════════════════════════════╗");
@@ -117,7 +132,7 @@ public class Parents {
     }else if (option == 2) {
 
             clearScreen();
-            Student S = new Student();
+            Student S = new Student(username);
             S.StudentDetails();
 
         } else if (option == 3) {
