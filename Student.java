@@ -3,6 +3,20 @@ import java.io.*;
 
 public class Student {
 
+    // Remembers the MyKid number from the most recent successful submission
+    // (kept for backward compatibility with any other code referencing it).
+    public static String lastMykid = null;
+
+    private String username;
+
+    public Student() {
+        this.username = null;
+    }
+
+    public Student(String username) {
+        this.username = username;
+    }
+
     public void StudentDetails() {
 
         int option;
@@ -81,6 +95,10 @@ public class Student {
                 System.out.println("✗ Invalid gender! Please enter F or M only.");
             }
 
+            // Registration date — captured automatically at the moment of submission
+            String regDate = java.time.LocalDate.now().format(
+                    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
             try (BufferedWriter bw = new BufferedWriter(
                     new FileWriter("student.txt", true))) {
 
@@ -88,7 +106,9 @@ public class Student {
                          dateOfBirth + " , " +
                          MykidNum + " , " +
                          HomeAddress + " , " +
-                         gender);
+                         gender + " , " +
+                         regDate + " , " +
+                         (username != null ? username : "UNKNOWN"));
                 bw.newLine();
 
                 System.out.println();
@@ -96,13 +116,15 @@ public class Student {
                 System.out.println("║       RECORD SAVED SUCCESSFULLY       ║");
                 System.out.println("╚═══════════════════════════════════════╝");
 
+                lastMykid = MykidNum;
+
             } catch (IOException iox) {
                 System.out.println("✗ Error: " + iox.getMessage());
             }System.out.print("\nPress [ENTER] to continue...");
              sc.nextLine();
 
         } else if (option == 2) {
-            Parents P = new Parents();
+            Parents P = new Parents(username);
             P.parentsMenu();
         } else {
             System.out.println();
