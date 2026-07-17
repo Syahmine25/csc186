@@ -1,227 +1,209 @@
+import java.util.Scanner;
 import java.io.*;
-import java.util.*;
 
-public class Parents {
-    Scanner input = new Scanner(System.in);
-    private String username;
+public class Registration {
 
-    public Parents() {
-        this.username = null;
-    }
-
-    public Parents(String username) {
-        this.username = username;
-    }
+    static final int WIDTH = 180;
 
     public static void clearScreen() {
         System.out.print("\f");
         System.out.flush();
     }
 
-    public void parentsMenu() {
-        int option;
-        do {
-            clearScreen();
-            System.out.println("╔═══════════════════════════════════════╗");
-            System.out.println("║            PARENTS DASHBOARD          ║");
-            System.out.println("╠═══════════════════════════════════════╣");
-            System.out.println("║  1. Provide Details                   ║");
-            System.out.println("║  2. Status Application                ║");
-            System.out.println("║  3. Back                              ║");
-            System.out.println("╚═══════════════════════════════════════╝");
-
-            System.out.print("► Choose option: ");
-            while (!input.hasNextInt()) {
-                System.out.println("✗ Invalid input! Please enter a number.");
-                input.nextLine();
-                System.out.print("► Choose option: ");
-            }
-
-            option = input.nextInt();
-            input.nextLine();
-
-            if (option == 1) {
-                ProvideDetails();
-            } else if (option == 2) {
-                StatusApply();
-            } else if (option == 3) {
-                System.out.println("Returning to Main Menu...");
-            } else {
-                System.out.println("✗ Invalid option! Please choose 1–3.");
-            }
-
-        } while (option != 3);
+    public static void blankLines(int n) {
+        for (int i = 0; i < n; i++)
+            System.out.println();
     }
 
-    public void ProvideDetails() {
-        int option;
-        String Name;
-        String MykadNum;
-        String Occupation;
-        String PhoneNum;
-        String choice;
+    public static void centerPrint(String text) {
+        int padding = Math.max(0, (WIDTH - text.length()) / 2);
+        for (int i = 0; i < padding; i++)
+            System.out.print(" ");
+        System.out.println(text);
+    }
 
-        clearScreen();
-        System.out.println("╔═══════════════════════════════════════╗");
-        System.out.println("║         SELECT INFORMATION TYPE       ║");
-        System.out.println("╠═══════════════════════════════════════╣");
-        System.out.println("║  1. Parents Details                   ║");
-        System.out.println("║  2. Student Details                   ║");
-        System.out.println("║  3. Document Upload                   ║");
-        System.out.println("║  4. Back                              ║");
-        System.out.println("╚═══════════════════════════════════════╝");
+    public static void centerInput(String text) {
+        for (int i = 0; i < 70; i++)
+            System.out.print(" ");
+        System.out.print(text);
+    }
 
-        System.out.print("► Choice: ");
+    public static void messagePrint(String text) {
+        for (int i = 0; i < 70; i++)
+            System.out.print(" ");
+        System.out.println(text);
+    }
 
-        while (!input.hasNextInt()) {
-            System.out.println("✗ Invalid option! Please enter a number.");
-            input.nextLine();
-            System.out.print("► Choice: ");
-        }
+    public static void pause(Scanner sc) {
+        System.out.println();
+        centerInput("Press [ENTER] to continue...");
+        sc.nextLine();
+    }
 
-        option = input.nextInt();
-        input.nextLine();
-
-        if (option == 1) {
-
-            do {
-                clearScreen();
-
-                System.out.println("╔═══════════════════════════════════════╗");
-                System.out.println("║           PARENTS DETAILS             ║");
-                System.out.println("╚═══════════════════════════════════════╝");
-
-                // Automatically tagged with the logged-in parent's username —
-                // no typing or selecting anything. This links to whatever
-                // student(s) were registered under this same account.
-                String linkKey = (username != null) ? username : "UNKNOWN";
-
-                System.out.print("► Parent Name  : ");
-                Name = input.nextLine();
-
-                System.out.print("► Parent's MyKad Number : ");
-                MykadNum = input.nextLine();
-
-                System.out.print("► Occupation   : ");
-                Occupation = input.nextLine();
-
-                System.out.print("► Phone Number : ");
-                PhoneNum = input.nextLine();
-
-                try (BufferedWriter bw = new BufferedWriter(
-                        new FileWriter("parents_details.txt", true))) {
-
-                    bw.write(linkKey + "," +
-                             Name + "," +
-                             MykadNum + "," +
-                             Occupation + "," +
-                             PhoneNum);
-                    bw.newLine();
-                    System.out.println("╔═══════════════════════════════════════╗");
-                    System.out.println("║      RECORD SAVED SUCCESSFULLY        ║");
-                    System.out.println("╚═══════════════════════════════════════╝");
-
-                } catch (IOException e) {
-                    System.out.println("✗ Error saving record: " + e.getMessage());
-                }
-                System.out.print("\nFill another details? (Y/N): ");
-                choice = input.nextLine();
-
-            } while (choice.equalsIgnoreCase("Y"));
-
-    }else if (option == 2) {
-
-            clearScreen();
-            Student S = new Student(username);
-            S.StudentDetails();
-
-        } else if (option == 3) {
-
-            clearScreen();
-            System.out.println("╔═══════════════════════════════════════╗");
-            System.out.println("║            DOCUMENT UPLOAD            ║");
-            System.out.println("╚═══════════════════════════════════════╝");
-
-            System.out.println("Opening PDF Manager...");
-            PDFManager manager = new PDFManager();
-            manager.pdfManagerMenu();
-
-        } else if (option == 4) {
-
-            System.out.println("Returning...");
-
-        } else {
-
-            System.out.println("✗ Invalid option! Please choose 1–4.");
-        }
-
-}
-    // ==================== STATUS APPLY ====================
-    public void StatusApply() {
-        clearScreen();
-        System.out.println("╔═══════════════════════════════════════╗");
-        System.out.println("║          APPLICATION STATUS           ║");
-        System.out.println("╚═══════════════════════════════════════╝");
-
-        System.out.print("► Enter your child's MyKid Number: ");
-        String mykidInput = input.nextLine();
-
-        boolean found = false;
-        String studentName = "";
-        String status = "";
-
-        try (BufferedReader br = new BufferedReader(new FileReader("status.txt"))) {
+    public static boolean checkFile(String filename, String user, String pass) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
-            String currentName = "";
-            String currentMykid = "";
-            String currentStatus = "";
-
             while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.startsWith("Student Name:")) {
-                    currentName = line.substring(13).trim();
-                } else if (line.startsWith("MyKid:")) {
-                    currentMykid = line.substring(6).trim();
-                } else if (line.startsWith("Status:")) {
-                    currentStatus = line.substring(7).trim();
-                    if (currentMykid.equals(mykidInput)) {
-                        found = true;
-                        studentName = currentName;
-                        status = currentStatus;
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    String savedUser = parts[0].trim();
+                    String savedPass = parts[1].trim();
+                    if (user.equals(savedUser) && pass.equals(savedPass)) {
+                        return true;
                     }
                 }
             }
         } catch (IOException e) {
-            System.out.println("⚠️ No application found. Please submit registration first.");
-            System.out.print("\nPress [ENTER] to continue...");
-            input.nextLine();
-            return;
+            messagePrint("Error reading file: " + filename);
         }
+        return false;
+    }
 
-        System.out.println();
-        if (found) {
-            System.out.println("╔═══════════════════════════════════════╗");
-            System.out.println("║           APPLICATION RESULT          ║");
-            System.out.println("╠═══════════════════════════════════════╣");
-            System.out.println("  Student Name : " + studentName);
-            System.out.println("  MyKid Number : " + mykidInput);
-            System.out.println("  Status       : " + status);
-            System.out.println("╚═══════════════════════════════════════╝");
-
-            if (status.equalsIgnoreCase("Approved")) {
-                System.out.println("🎉 Congratulations! Your child's registration has been APPROVED!");
-            } else if (status.toLowerCase().startsWith("rejected")) {
-                System.out.println("❌ Sorry, your child's registration has been REJECTED.");
-                System.out.println("   Reason: " + status);
-            } else {
-                System.out.println("⏳ Your application is still PENDING. Please check back later.");
+    // ✅ New helper: check if username already exists
+    public static boolean usernameExists(String filename, String user) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 1) {
+                    String savedUser = parts[0].trim();
+                    if (user.equals(savedUser)) {
+                        return true;
+                    }
+                }
             }
-        } else {
-            System.out.println("⚠️ No application found for MyKid Number: " + mykidInput);
-            System.out.println("   Please make sure you entered the correct MyKid Number.");
+        } catch (IOException e) {
+            // Ignore if file not found (means no accounts yet)
+        }
+        return false;
+    }
+
+    public static void showMainMenu() {
+        clearScreen();
+        blankLines(8);
+        centerPrint("╔═══════════════════════════════════════╗");
+        centerPrint("║        PRIMARY 1 REGISTRATION         ║");
+        centerPrint("║              MAIN MENU                ║");
+        centerPrint("╠═══════════════════════════════════════╣");
+        centerPrint("║  1. Login                             ║");
+        centerPrint("║  2. Create account for Parents        ║");
+        centerPrint("║  3. Exit                              ║");
+        centerPrint("╚═══════════════════════════════════════╝");
+        System.out.println();
+    }
+
+    public static void showLogin() {
+        clearScreen();
+        blankLines(8);
+        centerPrint("╔═══════════════════════════════════════╗");
+        centerPrint("║                LOGIN                  ║");
+        centerPrint("╚═══════════════════════════════════════╝");
+        System.out.println();
+    }
+
+    public static void showRegister() {
+        clearScreen();
+        blankLines(8);
+        centerPrint("╔═══════════════════════════════════════╗");
+        centerPrint("║        PARENT REGISTRATION            ║");
+        centerPrint("╚═══════════════════════════════════════╝");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            showMainMenu();
+            centerInput("► Choose option: ");
+
+            if (sc.hasNextInt()) {
+                int choice = sc.nextInt();
+                sc.nextLine();
+
+                if (choice == 1) {
+                    showLogin();
+                    centerInput("► Username: ");
+                    String loginUser = sc.nextLine();
+                    centerInput("► Password: ");
+                    String loginPass = sc.nextLine();
+
+                    boolean parentLogin = checkFile("parents_accounts.txt", loginUser, loginPass);
+                    boolean teacherLogin = checkFile("teacher.txt", loginUser, loginPass);
+
+                    if (parentLogin) {
+                        System.out.println();
+                        messagePrint("Login successful (Parent).");
+                        pause(sc);
+                        Parents P = new Parents(loginUser);
+                        P.parentsMenu();
+                    } else if (teacherLogin) {
+                        System.out.println();
+                        messagePrint("Login successful (Teacher).");
+                        pause(sc);
+                        Teacher t = new Teacher(sc);
+                        t.TeacherMenu();
+                    } else {
+                        System.out.println();
+                        messagePrint("Login failed. Incorrect username or password.");
+                        pause(sc);
+                    }
+
+                } else if (choice == 2) {
+                    showRegister();
+                    centerInput("► Create username: ");
+                    String username = sc.nextLine().trim();
+                    centerInput("► Create password: ");
+                    String password = sc.nextLine().trim();
+
+                    // ✅ Validation: empty input
+                    if (username.isEmpty() || password.isEmpty()) {
+                        System.out.println();
+                        messagePrint("Error: Username and password cannot be empty!");
+                        pause(sc);
+                    }
+                    // ✅ Validation: duplicate username
+                    else if (usernameExists("parents_accounts.txt", username)) {
+                        System.out.println();
+                        messagePrint("Error: Username already exists. Please choose another.");
+                        pause(sc);
+                    }
+                    else {
+                        try (BufferedWriter bw = new BufferedWriter(new FileWriter("parents_accounts.txt", true))) {
+                            bw.write(username + "," + password);
+                            bw.newLine();
+                            System.out.println();
+                            messagePrint("Registration successful!");
+                        } catch (IOException e) {
+                            messagePrint("Error saving file.");
+                        }
+                        pause(sc);
+                    }
+
+                } else if (choice == 3) {
+                    clearScreen();
+                    blankLines(10);
+                    centerPrint("╔══════════════════════════════════════╗");
+                    centerPrint("║          THANK YOU FOR USING         ║");
+                    centerPrint("║         PRIMARY 1 REGISTRATION       ║");
+                    centerPrint("║          HAVE A NICE DAY!            ║");
+                    centerPrint("╚══════════════════════════════════════╝");
+                    running = false;
+                } else {
+                    System.out.println();
+                    messagePrint("Invalid option! Choose 1 - 3.");
+                    pause(sc);
+                }
+
+            } else {
+                System.out.println();
+                messagePrint("Invalid input! Numbers only.");
+                sc.nextLine();
+                pause(sc);
+            }
         }
 
-        System.out.print("\nPress [ENTER] to continue...");
-        input.nextLine();
+        sc.close();
     }
 }
