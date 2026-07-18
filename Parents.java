@@ -179,7 +179,7 @@ public class Parents {
         clearScreen();
         blankLines(8);
         centerPrint("╔═══════════════════════════════════════╗");
-        centerPrint("║          APPLICATION STATUS           ║");
+        centerPrint("║          STATUS APPLICATION           ║");
         centerPrint("╚═══════════════════════════════════════╝");
         System.out.println();
 
