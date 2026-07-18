@@ -32,6 +32,11 @@ public class Student {
         for (int i = 0; i < 70; i++) System.out.print(" ");
         System.out.println(text);
     }
+    public static void pause(Scanner sc) {
+        System.out.println();
+        centerInput("Press [ENTER] to continue...");
+        sc.nextLine();
+    }
 
     // ===== STUDENT DETAILS MENU =====
     public void StudentDetails() {
@@ -52,6 +57,16 @@ public class Student {
         while (!sc.hasNextInt()) {
             messagePrint("✗ Invalid option! Please enter 1 or 2.");
             sc.nextLine();
+            pause(sc);
+            clearScreen();
+            blankLines(8);
+            centerPrint("╔═══════════════════════════════════════╗");
+            centerPrint("║         STUDENT REGISTRATION          ║");
+            centerPrint("╠═══════════════════════════════════════╣");
+            centerPrint("║  1. Enter Student Details             ║");
+            centerPrint("║  2. Back                              ║");
+            centerPrint("╚═══════════════════════════════════════╝");
+            System.out.println();
             centerInput("Choice: ");
         }
         option = sc.nextInt();
@@ -74,6 +89,13 @@ public class Student {
                 if (!StudentName.matches("[a-zA-Z ]+")) {
                     messagePrint("✗ Invalid name! Letters only.");
                     StudentName = "";
+                    pause(sc);
+                    clearScreen();
+                    blankLines(8);
+                    centerPrint("╔═══════════════════════════════════════╗");
+                    centerPrint("║          ENTER STUDENT DATA           ║");
+                    centerPrint("╚═══════════════════════════════════════╝");
+                    System.out.println();
                 }
             } while (StudentName.isEmpty());
 
@@ -84,6 +106,13 @@ public class Student {
                 if (!dateOfBirth.matches("\\d{2}/\\d{2}/\\d{4}")) {
                     messagePrint("✗ Invalid date format! Use DD/MM/YYYY.");
                     dateOfBirth = "";
+                    pause(sc);
+                    clearScreen();
+                    blankLines(8);
+                    centerPrint("╔═══════════════════════════════════════╗");
+                    centerPrint("║          ENTER STUDENT DATA           ║");
+                    centerPrint("╚═══════════════════════════════════════╝");
+                    System.out.println();
                 }
             } while (dateOfBirth.isEmpty());
 
@@ -94,12 +123,32 @@ public class Student {
                 if (!MykidNum.matches("\\d{12}")) {
                     messagePrint("✗ Invalid MyKid Number! Must be 12 digits.");
                     MykidNum = "";
+                    pause(sc);
+                    clearScreen();
+                    blankLines(8);
+                    centerPrint("╔═══════════════════════════════════════╗");
+                    centerPrint("║          ENTER STUDENT DATA           ║");
+                    centerPrint("╚═══════════════════════════════════════╝");
+                    System.out.println();
                 }
             } while (MykidNum.isEmpty());
 
             // Address
-            centerInput("► Home Address  : ");
-            HomeAddress = sc.nextLine();
+            do {
+                centerInput("► Home Address  : ");
+                HomeAddress = sc.nextLine().trim();
+                if (HomeAddress.isEmpty()) {
+                    messagePrint("✗ Invalid address! Cannot be empty.");
+                    HomeAddress = "";
+                    pause(sc);
+                    clearScreen();
+                    blankLines(8);
+                    centerPrint("╔═══════════════════════════════════════╗");
+                    centerPrint("║          ENTER STUDENT DATA           ║");
+                    centerPrint("╚═══════════════════════════════════════╝");
+                    System.out.println();
+                }
+            } while (HomeAddress.isEmpty());
 
             // Gender
             do {
@@ -108,6 +157,13 @@ public class Student {
                 if (!(gender.equals("F") || gender.equals("M"))) {
                     messagePrint("✗ Invalid gender! Please enter F or M only.");
                     gender = "";
+                    pause(sc);
+                    clearScreen();
+                    blankLines(8);
+                    centerPrint("╔═══════════════════════════════════════╗");
+                    centerPrint("║          ENTER STUDENT DATA           ║");
+                    centerPrint("╚═══════════════════════════════════════╝");
+                    System.out.println();
                 }
             } while (gender.isEmpty());
 
@@ -144,6 +200,7 @@ public class Student {
             P.parentsMenu();
         } else {
             messagePrint("✗ Invalid option! Please choose 1 or 2.");
+            pause(sc);
         }
     }
 }
